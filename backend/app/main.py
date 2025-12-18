@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from . import models, crud, database
 from .utils import upload_image_to_yc
@@ -27,8 +27,8 @@ def read_task(task_id: int, db: Session = Depends(get_db)):
 
 @app.post("/tasks")
 async def create_task_endpoint(
-        title: str,
-        description: str = None,
+        title: str = Form(...),  # Используем Form() вместо просто параметров
+        description: str = Form(None),
         image: UploadFile = File(None),
         db: Session = Depends(get_db)
 ):
