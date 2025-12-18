@@ -5,4 +5,7 @@ boto3
 fastapi
 uvicorn
 sqlalchemy
-psycopg2-binary
+aioboto3
+aiohttp
+pydantic
+pydantic-settings
