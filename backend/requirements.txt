@@ -9,3 +9,5 @@ aioboto3
 aiohttp
 pydantic
 pydantic-settings
+psutil==5.9.8
+prometheus-client==0.20.0
