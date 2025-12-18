@@ -1,14 +1,15 @@
 from sqlalchemy.orm import Session
 from . import models
 
+
 def get_tasks(db: Session):
     return db.query(models.Task).all()
 
 def get_task(db: Session, task_id: int):
     return db.query(models.Task).filter(models.Task.id == task_id).first()
 
-def create_task(db: Session, title: str, description: str = None):
-    task = models.Task(title=title, description=description)
+def create_task(db: Session, title: str, description: str = None, image_url: str = None):
+    task = models.Task(title=title, description=description, image_url=image_url)
     db.add(task)
     db.commit()
     db.refresh(task)

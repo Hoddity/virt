@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from . import models, crud, database
+from .utils import upload_image_to_yc
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -25,8 +26,18 @@ def read_task(task_id: int, db: Session = Depends(get_db)):
     return task
 
 @app.post("/tasks")
-def create_task(title: str, description: str = None, db: Session = Depends(get_db)):
-    return crud.create_task(db, title, description)
+async def create_task_endpoint(
+        title: str,
+        description: str = None,
+        image: UploadFile = File(None),
+        db: Session = Depends(get_db)
+):
+    image_url = None
+    if image:
+        image_url = upload_image_to_yc(image)
+
+    task = crud.create_task(db, title, description, image_url)
+    return task
 
 @app.put("/tasks/{task_id}")
 def update_task(task_id: int, title: str = None, description: str = None, status: str = None, db: Session = Depends(get_db)):

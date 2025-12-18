@@ -10,3 +10,4 @@ class Task(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
     status = Column(String, default="pending")
+    image_url = Column(String, nullable=True)

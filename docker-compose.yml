@@ -14,12 +14,31 @@ services:
       - db_data:/var/lib/postgresql/data
 
   backend:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: tasks_api
     depends_on:
       - db
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/tasks_db"
+      YC_ACCESS_KEY: ${YC_ACCESS_KEY}
+      YC_SECRET_KEY: ${YC_SECRET_KEY}
+      YC_BUCKET: ${YC_BUCKET}
     ports:
       - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tasks_front
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: "http://backend:8000"
 
 volumes:
   db_data:
